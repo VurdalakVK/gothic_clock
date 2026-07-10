@@ -139,7 +139,7 @@
         font-family: "Cinzel Decorative", serif;
         font-weight: 800;
         letter-spacing: 0.35em;
-        font-size: clamp(11px, 1.4vw, 15px);
+        font-size: 20px;
         color: var(--bone-dim);
         text-transform: uppercase;
         text-shadow: 0 0 12px rgba(181, 69, 27, 0.25);
@@ -218,6 +218,16 @@
         text-shadow: 0 0 10px rgba(181, 69, 27, 0.5);
         align-self: center;
         padding-bottom: 4px;
+      }
+
+      .meridiem {
+        font-family: "Cinzel Decorative", serif;
+        color: var(--gold);
+        font-size: clamp(11px, 1.6vw, 16px);
+        letter-spacing: 0.2em;
+        align-self: flex-end;
+        padding-bottom: clamp(6px, 1.4vw, 12px);
+        text-shadow: 0 0 8px rgba(169, 129, 47, 0.35);
       }
 
       .digit {
@@ -360,7 +370,7 @@
         font-weight: 800;
         letter-spacing: 0.12em;
         color: var(--bone-dim);
-        font-size: clamp(16px, 2.6vw, 18px);
+        font-size: 20px;
         text-transform: capitalize;
       }
 
@@ -390,6 +400,7 @@
         <div class="unit" id="hh"></div>
         <div class="colon">☠</div>
         <div class="unit" id="mm"></div>
+        <div class="meridiem" id="meridiem"></div>
       </div>
 
       <div class="date" id="date"></div>
@@ -454,11 +465,16 @@
 
       function tick() {
         const now = new Date();
-        const hh = String(now.getHours()).padStart(2, "0");
+        let h = now.getHours() % 12;
+        if (h === 0) h = 12;
+        const hh = String(h).padStart(2, "0");
         const mm = String(now.getMinutes()).padStart(2, "0");
 
         updateUnit("hh", hh);
         updateUnit("mm", mm);
+
+        document.getElementById("meridiem").textContent =
+          now.getHours() < 12 ? "AM" : "PM";
 
         document.getElementById("date").textContent = dateFmt.format(now);
       }
